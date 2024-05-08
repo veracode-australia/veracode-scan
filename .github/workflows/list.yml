@@ -11,6 +11,7 @@ jobs:
         with:
           repository: "vsdeng-veracode-qan/verademo-java-maven-no-config"
           ssh-key: ${{ secrets.SSH_KEY }}
+          path: "source-code-repo"
 
       - uses: actions/checkout@v4
         with:
@@ -38,7 +39,7 @@ jobs:
           cd $cliFileName
           chmod +x install.sh
           ./install.sh system
-          cd /home/runner/work/veracode/veracode/
+          cd /home/runner/work/veracode-scan/source-code-repo/
           veracode package --source . --output veracode-artifacts --trust
           zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
       - uses: actions/upload-artifact@v3
