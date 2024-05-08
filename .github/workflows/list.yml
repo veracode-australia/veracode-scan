@@ -10,4 +10,5 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: 'vsdeng-veracode-qan/verademo-java-maven-no-config'
+          ref: 'main'
           token: ${{ secrets.GH_TOKEN }}
