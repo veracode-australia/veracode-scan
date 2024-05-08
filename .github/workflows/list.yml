@@ -11,6 +11,11 @@ jobs:
         with:
           repository: "vsdeng-veracode-qan/verademo-java-maven-no-config"
           ssh-key: ${{ secrets.SSH_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          path: "veracode-helper"
+
       - uses: actions/setup-java@v3
         with:
           java-version: 8
