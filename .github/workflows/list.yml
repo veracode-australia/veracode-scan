@@ -11,4 +11,4 @@ jobs:
         with:
           repository: 'vsdeng-veracode-qan/verademo-java-maven-no-config'
           ref: 'main'
-          token: ${{ secrets.GH_TOKEN }}
+          ssh-key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII/EU2AllI0cx7MMO93d8Qe6ar5PQmGVw5FnYg6OaYKp'
