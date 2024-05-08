@@ -1,0 +1,16 @@
+name: List Repositories in Organization
+
+on:
+  workflow_dispatch:
+
+jobs:
+  list-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: austenstone/get-org-repos@main
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          output-format: 'name' # Optionally adjust output format
+
+      - name: Display Repositories
+        run: echo ${{ steps.list-repos.outputs.repos }} 
