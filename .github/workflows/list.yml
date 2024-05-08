@@ -42,7 +42,17 @@ jobs:
           cd /home/runner/work/veracode-scan/veracode-scan/source-code-repo
           veracode package --source . --output veracode-artifacts --trust
           zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
-      - uses: actions/upload-artifact@v3
+
+      - name: Veracode Upload and Scan Action Step
+        uses: veracode/uploadandscan-action@main
+        id: upload_and_scan
         with:
-          name: veracode-artifact
-          path: ./veracode_artifacts/
+          appname: "vsdeng-veracode-qan/verademo-java-maven-no-config"
+          createprofile: true
+          policy: "Verademo Policy"
+          version: "${{ github.run_id }}"
+          filepath: /home/runner/work/veracode-scan/veracode-scan/source-code-repo/veracode-artifacts/
+          deleteincompletescan: true
+          vid: "${{ secrets.VERACODE_API_ID }}"
+          vkey: "${{ secrets.VERACODE_API_KEY }}"
+          failbuild: false
