@@ -1,9 +1,7 @@
 name: Scan Repository
 
 on:
-  repository_dispatch:
-    types:
-      - veracode-policy-scan
+  workflow_dispatch:
 
 jobs:
   get-org-repos:
