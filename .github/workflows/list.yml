@@ -39,7 +39,7 @@ jobs:
           cd $cliFileName
           chmod +x install.sh
           ./install.sh system
-          cd /home/runner/work/veracode-scan/source-code-repo/
+          cd /home/runner/work/veracode-scan/veracode-scan/source-code-repo
           veracode package --source . --output veracode-artifacts --trust
           zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
       - uses: actions/upload-artifact@v3
