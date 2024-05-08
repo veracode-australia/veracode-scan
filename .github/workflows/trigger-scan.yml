@@ -14,8 +14,8 @@ jobs:
           CSV_FILE: repositories.csv # Name of your CSV file
         run: |
           count=0
-          while IFS=, read -r repo _; do 
-            if [[ -n "$repo" ]]; then  
+          while IFS=, read -r repo batch _; do  
+            if [[ -n "$repo" && "$batch" == "1" ]]; then  
               echo "Triggering scan for: $repo"
               curl -X POST \
                 -H "Accept: application/vnd.github+json" \
@@ -23,7 +23,7 @@ jobs:
                 https://api.github.com/repos/vsdeng-veracode-qan/veracode-scan/dispatches \
                 -d '{"event_type": "veracode-policy-scan", "client_payload": {"repository_full_name": "'"$repo"'"}}'
               count=$((count + 1))
-              if [[ $count -eq 2 ]]; then
+              if [[ $count -eq 10 ]]; then
                 echo "Pausing for 20 seconds..." 
                 sleep 20  # Wait for 20 seconds
                 count=0   # Reset counter
