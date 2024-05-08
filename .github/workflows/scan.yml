@@ -1,5 +1,7 @@
 name: Scan Repository
 
+run-name: Static Code Analysis - ${{ github.event.client_payload.repository_full_name }}
+
 on:
   repository_dispatch:
     types:
