@@ -8,7 +8,8 @@ on:
       - veracode-policy-scan
 
 jobs:
-  get-org-repos:
+  veracode-policy-scan:
+    name: Run Veracode Policy Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
