@@ -4,13 +4,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  list-repos:
+  get-org-repos:
     runs-on: ubuntu-latest
     steps:
       - uses: austenstone/get-org-repos@main
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          output-format: 'name' # Optionally adjust output format
+          github-token: ${{ secrets.TOKEN }}
+        id: get-org-repos
+    outputs:
+      repos: ${{ steps.get-org-repos.outputs.repos }}
 
-      - name: Display Repositories
-        run: echo ${{ steps.list-repos.outputs.repos }} 
+  print:
+    runs-on: ubuntu-latest
+    needs: [get-org-repos]
+    strategy:
+      matrix:
+        repo: ${{ fromJson(needs.get-org-repos.outputs.repos) }}
+      fail-fast: false
+    steps:
+      - run: echo "Hello ${{ matrix.repo }}!"
