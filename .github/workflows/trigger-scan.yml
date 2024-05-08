@@ -8,10 +8,18 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4  # Check out the repository 
       - name: Tigger Veracode Scan in Another Workflow
+        env:
+          CSV_FILE: repositories.csv  # Name of your CSV file
         run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/vsdeng-veracode-qan/veracode-scan/dispatches \
-            -d '{"event_type":"veracode-policy-scan"}'
+          while IFS=, read -r repo _; do  # Read CSV, assuming comma-separated
+            if [[ -n "$repo" ]]; then  # Check for non-empty repo name
+              echo "Triggering scan for: $repo"
+              curl -X POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                https://api.github.com/repos/vsdeng-veracode-qan/veracode-scan/dispatches \
+                -d '{"event_type": "veracode-policy-scan"}' 
+            fi
+          done < $CSV_FILE 
