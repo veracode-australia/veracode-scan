@@ -1,58 +1,22 @@
-name: List Repositories in Organization
+name: List Repositories in the Organization
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
-  get-org-repos:
+  dispatch-event:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Get Repositories (Page 1)
+        id: get_repos
+        uses: actions/github-script@v6
         with:
-          repository: "vsdeng-veracode-qan/verademo-java-maven-no-config"
-          ssh-key: ${{ secrets.SSH_KEY }}
-          path: "source-code-repo"
-
-      - uses: actions/checkout@v4
-        with:
-          path: "veracode-helper"
-
-      - uses: actions/setup-java@v3
-        with:
-          java-version: 8
-          distribution: temurin
-      - name: Cache Maven Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-
-      - name: Package the appliccation
-        env:
-          VERACODE_API_KEY_ID: "${{ secrets.VERACODE_API_ID }}"
-          VERACODE_API_KEY_SECRET: "${{ secrets.VERACODE_API_KEY }}"
-        run: |
-          cd veracode-helper/helper/cli
-          cliFile=$(ls -1 . | head -n 1)
-          cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
-          tar -zxvf $cliFile
-          cd $cliFileName
-          chmod +x install.sh
-          ./install.sh system
-          cd /home/runner/work/veracode-scan/veracode-scan/source-code-repo
-          veracode package --source . --output veracode-artifacts --trust
-          zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
-
-      - name: Veracode Upload and Scan Action Step
-        uses: veracode/uploadandscan-action@main
-        id: upload_and_scan
-        with:
-          appname: "vsdeng-veracode-qan/verademo-java-maven-no-config"
-          createprofile: true
-          policy: "Verademo Policy"
-          version: "${{ github.run_id }}"
-          filepath: /home/runner/work/veracode-scan/veracode-scan/source-code-repo/veracode-artifacts/
-          deleteincompletescan: true
-          vid: "${{ secrets.VERACODE_API_ID }}"
-          vkey: "${{ secrets.VERACODE_API_KEY }}"
-          failbuild: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data } = await github.repos.listForOrg({
+              org: 'vsdeng-veracode-qan',
+              per_page: 100,
+              page: 1
+            });
+            console.log(data.map(repo => repo.full_name).join('\n'));
+            console.log(`::set-output name=repos::${data.map(repo => repo.full_name).join('\n')}`);

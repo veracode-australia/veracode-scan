@@ -1,0 +1,16 @@
+name: Trigger Veracode Scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dispatch-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tigger Veracode Scan in Another Workflow
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/vsdeng-veracode-qan/veracode-scan/dispatches \
+            -d '{"event_type": "veracode-policy-scan"}'
