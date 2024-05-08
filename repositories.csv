@@ -1,2 +1,3 @@
-vsdeng-veracode-qan/veracode-scan, other-data 
-another-org/repo-to-scan, more-data
+vsdeng-veracode-qan/qan-python, other-data 
+vsdeng-veracode-qan/verademo-java-maven-no-config
+, more-data
