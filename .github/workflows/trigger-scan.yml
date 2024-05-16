@@ -2,6 +2,10 @@ name: Trigger Veracode Scan
 
 on:
   workflow_dispatch:
+    inputs:
+      batch:
+        required: true
+        type: string
 
 jobs:
   dispatch-event:
