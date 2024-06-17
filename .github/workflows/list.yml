@@ -6,6 +6,10 @@ on:
 jobs:
   list-repos:
     runs-on: ubuntu-latest
+    
+    env: #Added
+     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Modified
+     
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
