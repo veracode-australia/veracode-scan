@@ -7,8 +7,7 @@ jobs:
   list-repos:
     runs-on: ubuntu-latest
     
-    env: #Added
-     GH_TOKEN: ${{ secrets.ACCESS_TOKEN }} # Modified
+    
      
     steps:
       - name: Checkout Repository
@@ -24,6 +23,8 @@ jobs:
       - name: List Repositories (Replace with your org name)
         run: |
           gh repo list vsdeng-veracode-qan --limit 1000 --json name > repos.json
+        env: #Added
+          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }} # Modified
        
       - name: Convert to CSV
         run: |
