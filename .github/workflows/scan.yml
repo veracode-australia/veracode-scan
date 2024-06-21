@@ -48,7 +48,7 @@ jobs:
           chmod +x install.sh
           ./install.sh system
           cd /home/runner/work/veracode-scan/veracode-scan/source-code-repo
-          veracode package --source . --output veracode-artifacts --trust
+          veracode package --source . --output veracode-artifacts --trust --debug
           zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
 
       - name: Veracode Upload and Scan Action Step
