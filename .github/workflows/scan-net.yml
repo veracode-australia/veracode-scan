@@ -33,13 +33,13 @@ jobs:
       with:
         path: "veracode-helper"
 
-    - name: List Current Directory Contents  # Added step
-      run: |
-        Get-ChildItem -Directory
+    - name: Change directory to source-code-repo
+      run: cd source-code-repo
 
     - name: Check for .csproj files
       id: check_csproj
       run: |
+        Get-ChildItem -Directory
         if ((Get-ChildItem -Recurse -Filter *.csproj).Count -eq 0) {
           echo "No .csproj files found."
           echo "continue=false" >> $env:GITHUB_ENV
