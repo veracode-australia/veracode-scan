@@ -38,6 +38,7 @@ jobs:
 
     - name: Check for .csproj files
       id: check_csproj
+      working-directory: source-code-repo
       run: |
         Get-ChildItem -Directory
         if ((Get-ChildItem -Recurse -Filter *.csproj).Count -eq 0) {
