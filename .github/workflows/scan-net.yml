@@ -1,0 +1,106 @@
+name: Scan Repository
+
+run-name: Static Code Analysis - ${{ github.event.client_payload.repository_full_name }}
+
+on:
+  repository_dispatch:
+    types:
+      - veracode-policy-scan-net
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: .
+
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: Debug
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ github.event.client_payload.repository_full_name }}
+        # ssh-key: ${{ secrets.SSH_KEY }}
+        token: ${{ secrets.ACCESS_TOKEN }}
+        path: "source-code-repo"
+    - uses: actions/checkout@v4
+      with:
+        path: "veracode-helper"
+
+    - name: List Current Directory Contents  # Added step
+      run: |
+        Get-ChildItem -Directory
+
+    - name: Check for .csproj files
+      id: check_csproj
+      run: |
+        if ((Get-ChildItem -Recurse -Filter *.csproj).Count -eq 0) {
+          echo "No .csproj files found."
+          echo "continue=false" >> $env:GITHUB_ENV
+        } else {
+          echo "Found .csproj files."
+          echo "continue=true" >> $env:GITHUB_ENV
+        }
+    
+  # veracode-policy-scan:
+  #   name: Run Veracode Policy Scan
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     ACTIONS_STEP_DEBUG: true
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         repository: ${{ github.event.client_payload.repository_full_name }}
+  #         # ssh-key: ${{ secrets.SSH_KEY }}
+  #         token: ${{ secrets.ACCESS_TOKEN }}
+  #         path: "source-code-repo"
+
+  #     - uses: actions/checkout@v4
+      #   with:
+      #     path: "veracode-helper"
+
+      # - uses: actions/setup-java@v3
+      #   with:
+      #     java-version: 8
+      #     distribution: temurin
+      # - name: Cache Maven Dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.m2
+      #     key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+
+      # - name: Package the appliccation
+      #   env:
+      #     VERACODE_API_KEY_ID: "${{ secrets.VERACODE_API_ID }}"
+      #     VERACODE_API_KEY_SECRET: "${{ secrets.VERACODE_API_KEY }}"
+      #   run: |
+      #     cd veracode-helper/helper/cli
+      #     cliFile=$(ls -1 . | head -n 1)
+      #     cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
+      #     tar -zxvf $cliFile
+      #     cd $cliFileName
+      #     chmod +x install.sh
+      #     ./install.sh system
+      #     cd /home/runner/work/veracode-scan/veracode-scan/source-code-repo
+      #     veracode package --source . --output veracode-artifacts --trust --debug
+      #     zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
+
+      # - name: Veracode Upload and Scan Action Step
+      #   uses: veracode/uploadandscan-action@main
+      #   id: upload_and_scan
+      #   with:
+      #     appname: ${{ github.event.client_payload.repository_full_name }}
+      #     createprofile: true
+      #     policy: "Verademo Policy"
+      #     version: "${{ github.run_id }}"
+      #     filepath: /home/runner/work/veracode-scan/veracode-scan/source-code-repo/veracode-artifacts/
+      #     deleteincompletescan: true
+      #     vid: "${{ secrets.VERACODE_API_ID }}"
+      #     vkey: "${{ secrets.VERACODE_API_KEY }}"
+      #     failbuild: false
