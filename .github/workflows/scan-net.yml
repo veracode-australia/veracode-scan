@@ -65,29 +65,21 @@ jobs:
       with:
         args: install veracode-cli
 
-    # - name: Package the appliccation
-    #   env:
-    #     VERACODE_API_KEY_ID: "${{ secrets.VERACODE_API_ID }}"
-    #     VERACODE_API_KEY_SECRET: "${{ secrets.VERACODE_API_KEY }}"
-    #   run: |
-    #     cd veracode-helper/helper/cli
-    #     cliFile=$(ls -1 . | head -n 1)
-    #     cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
-    #     tar -zxvf $cliFile
-    #     cd $cliFileName
-    #     chmod +x install.sh
-    #     ./install.sh system
-    #     cd /home/runner/work/veracode-scan/veracode-scan/source-code-repo
-    #     veracode package --source . --output veracode-artifacts --trust --debug
-    #     zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
-
     - name: Package and save output
       if: env.continue == 'true'
       working-directory: source-code-repo
       run: |
         Get-ChildItem -Directory
         $outputFile = "${{ github.event.repository.name }}_veracode_log.txt"
-        veracode package -das . 2>&1 | Tee-Object -FilePath $outputFile
+        veracode package -das . -o veracode_artifacts 2>&1 | Tee-Object -FilePath $outputFile
+        Get-ChildItem -Directory
+
+    - name: Upload veracode output as artifact
+      if: env.continue == 'true'
+      uses: actions/upload-artifact@v3
+      with:
+        name: veracode-package-log
+        path: ${{ github.event.repository.name }}_veracode_log.txt
     
   # veracode-policy-scan:
   #   name: Run Veracode Policy Scan
