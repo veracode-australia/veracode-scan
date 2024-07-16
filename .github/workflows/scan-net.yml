@@ -33,9 +33,6 @@ jobs:
       with:
         path: "veracode-helper"
 
-    - name: Change directory to source-code-repo
-      run: cd source-code-repo
-
     - name: Check for .csproj files
       id: check_csproj
       working-directory: source-code-repo
