@@ -56,8 +56,7 @@ jobs:
       if: env.continue == 'true'
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        echo ${{env.GITHUB_WORKSPACE}}
-        echo ${{env.SOLUTION_FILE_PATH}}
+        Get-ChildItem -Directory
         nuget restore ${{env.SOLUTION_FILE_PATH}}
     
   # veracode-policy-scan:
