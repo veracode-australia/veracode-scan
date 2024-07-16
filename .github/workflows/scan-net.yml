@@ -80,8 +80,8 @@ jobs:
       if: env.continue == 'true'
       uses: actions/upload-artifact@v3
       with:
-        name: veracode-package-log
-        path: ${{ github.event.repository.name }}_veracode_log.txt
+        name: veracode-artifacts
+        path: source-code-repo/veracode_artifacts
     
   # veracode-policy-scan:
   #   name: Run Veracode Policy Scan
