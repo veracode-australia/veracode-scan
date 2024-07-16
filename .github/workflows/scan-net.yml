@@ -38,6 +38,8 @@ jobs:
       working-directory: source-code-repo
       run: |
         Get-ChildItem -Directory
+        cd Verademo-Dotnet
+        Get-ChildItem -Directory
         if ((Get-ChildItem -Recurse -Filter *.csproj).Count -eq 0) {
           echo "No .csproj files found."
           echo "continue=false" >> $env:GITHUB_ENV
