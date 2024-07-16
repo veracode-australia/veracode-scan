@@ -73,6 +73,8 @@ jobs:
         $outputFile = "${{ github.event.repository.name }}_veracode_log.txt"
         veracode package -das . -o veracode_artifacts 2>&1 | Tee-Object -FilePath $outputFile
         Get-ChildItem -Directory
+        cd veracode_artifacts
+        Get-ChildItem -Directory
 
     - name: Upload veracode output as artifact
       if: env.continue == 'true'
