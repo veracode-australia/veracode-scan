@@ -47,6 +47,18 @@ jobs:
           echo "Found .csproj files."
           echo "continue=true" >> $env:GITHUB_ENV
         }
+        
+    - name: Add MSBuild to PATH
+      if: env.continue == 'true'
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Restore NuGet packages
+      if: env.continue == 'true'
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        echo ${{env.GITHUB_WORKSPACE}}
+        echo ${{env.SOLUTION_FILE_PATH}}
+        nuget restore ${{env.SOLUTION_FILE_PATH}}
     
   # veracode-policy-scan:
   #   name: Run Veracode Policy Scan
