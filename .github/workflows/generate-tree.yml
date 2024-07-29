@@ -1,0 +1,26 @@
+name: Generate Repo Tree
+
+run-name: Generate Repo Tree - ${{ github.event.client_payload.repository_full_name }}
+
+on:
+  repository_dispatch:
+    types:
+      - veracode-generate-tree
+
+jobs:
+  veracode-policy-scan:
+    name: Run Veracode Policy Scan
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_STEP_DEBUG: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.client_payload.repository_full_name }}
+          ssh-key: ${{ secrets.WIN_SSH_KEY }}
+          # token: ${{ secrets.ACCESS_TOKEN }}
+          path: "source-code-repo"
+
+      - name: Package the appliccation
+        run: |
+          tree
