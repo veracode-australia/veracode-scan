@@ -23,4 +23,10 @@ jobs:
 
       - name: Package the appliccation
         run: |
-          tree
+          tree > tree-structure.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: tree-structure
+          path: tree-structure.txt
