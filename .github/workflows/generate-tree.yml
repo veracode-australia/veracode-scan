@@ -17,8 +17,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: ${{ github.event.client_payload.repository_full_name }}
-          ssh-key: ${{ secrets.WIN_SSH_KEY }}
-          # token: ${{ secrets.ACCESS_TOKEN }}
+          # ssh-key: ${{ secrets.WIN_SSH_KEY }}
+          token: ${{ secrets.ACCESS_TOKEN }}
           path: "source-code-repo"
 
       - name: Package the appliccation
