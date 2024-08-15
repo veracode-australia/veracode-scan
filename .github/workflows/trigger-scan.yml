@@ -26,7 +26,7 @@ jobs:
                 -H "Accept: application/vnd.github+json" \
                 -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                 https://api.github.com/repos/vsdeng-veracode-qan/veracode-scan/dispatches \
-                -d '{"event_type": "veracode-generate-tree", "client_payload": {"repository_full_name": "'"$repo"'"}}'
+                -d '{"event_type": "veracode-policy-scan", "client_payload": {"repository_full_name": "'"$repo"'"}}'
               count=$((count + 1))
               if [[ $count -eq 10 ]]; then
                 echo "Pausing for 20 seconds..." 
