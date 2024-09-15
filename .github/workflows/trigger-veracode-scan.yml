@@ -17,5 +17,6 @@ jobs:
         uses: veracode-australia/policy-app-action@main
         with:
           action: triggerPolicyScan
+          repository_full_name: ${{ github.repository }}
           batch_number: ${{ github.event.inputs.batch }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
