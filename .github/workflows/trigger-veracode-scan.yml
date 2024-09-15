@@ -16,6 +16,6 @@ jobs:
       - name: Tigger Veracode Scan in Another Workflow
         uses: veracode-australia/policy-app-action@main
         with:
-          action: triggerPoicyScan
+          action: triggerPolicyScan
           batch_number: ${{ github.event.inputs.batch }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
