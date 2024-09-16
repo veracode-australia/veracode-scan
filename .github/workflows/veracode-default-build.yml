@@ -45,7 +45,6 @@ jobs:
           cd $cliFileName
           cliPath=`pwd`
           export PATH="$cliPath:$PATH"
-          echo $PATH
           cd $working_path/source-code-repo
           veracode package --source . --output $working_path/veracode-artifacts --trust
 
