@@ -18,19 +18,12 @@ jobs:
     env:
       VERACODE_API_KEY_ID: "${{ secrets.VERACODE_API_ID }}"
       VERACODE_API_KEY_SECRET: "${{ secrets.VERACODE_API_KEY }}"
-    #   ACCESS_TOKEN: "${{ secrets.ACCESS_TOKEN }}"
     steps:
       - uses: actions/checkout@v4
         with:
           repository: ${{ inputs.repository_full_name }}
           token: ${{ secrets.ACCESS_TOKEN }}
           path: "source-code-repo"
-      # - uses: actions/checkout@v4
-      #   with:
-      #     repository: ${{ inputs.repository_full_name }}
-      #     # ssh-key: ${{ secrets.SSH_KEY }}
-      #     token: ${{ secrets.ACCESS_TOKEN }}
-      #     path: "source-code-repo"
 
       - uses: actions/checkout@v4
         with:
@@ -50,8 +43,9 @@ jobs:
           cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
           tar -zxvf $cliFile
           cd $cliFileName
-          chmod +x install.sh
-          ./install.sh system
+          cliPath=`pwd`
+          export PATH="$cliPath:$PATH"
+          echo $PATH
           cd $working_path/source-code-repo
           veracode package --source . --output $working_path/veracode-artifacts --trust
 
