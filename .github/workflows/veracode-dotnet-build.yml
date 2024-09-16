@@ -1,0 +1,91 @@
+name: Veracode Build
+
+on:
+  workflow_call:
+    inputs:
+      repository_full_name:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+
+env:
+  SOLUTION_FILE_PATH: .
+  BUILD_CONFIGURATION: Debug
+  continue: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ inputs.image }}
+    env:
+      VERACODE_API_KEY_ID: "${{ secrets.VERACODE_API_ID }}"
+      VERACODE_API_KEY_SECRET: "${{ secrets.VERACODE_API_KEY }}"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository_full_name }}
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: "source-code-repo"
+
+      - uses: actions/checkout@v4
+        with:
+          path: "veracode-helper"
+
+      - name: Check for .csproj files
+        id: check_csproj
+        working-directory: source-code-repo
+        run: |
+          Get-ChildItem -Directory
+          cd Verademo-Dotnet
+          Get-ChildItem -Directory
+          if ((Get-ChildItem -Recurse -Filter *.csproj).Count -eq 0) {
+            echo "No .csproj files found."
+            echo "continue=false" >> $env:GITHUB_ENV
+          } else {
+            echo "Found .csproj files."
+            echo "continue=true" >> $env:GITHUB_ENV
+          }
+
+      - name: Add MSBuild to PATH
+        if: env.continue == 'true'
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Restore NuGet packages
+        if: env.continue == 'true'
+        working-directory: source-code-repo
+        run: |
+          Get-ChildItem -Directory
+          nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+      - name: install CLI
+        if: env.continue == 'true'
+        uses: crazy-max/ghaction-chocolatey@v3
+        with:
+          args: install veracode-cli
+
+      - name: Package and save output
+        id: application_package
+        if: env.continue == 'true'
+        working-directory: source-code-repo
+        run: |
+          Get-ChildItem -Directory
+          $outputFile = "${{ github.event.repository.name }}_veracode_log.txt"
+          veracode package -das . -o veracode_artifacts 2>&1 | Tee-Object -FilePath $outputFile
+          Get-ChildItem -Directory
+          cd veracode_artifacts
+          Get-ChildItem -Directory
+
+      - name: Package error
+        if: failure() && steps.application_package.outcome == 'failure'
+        run: |
+          echo "::error::Veracode static scan faced a problem. Please contact your Veracode administrator for more information."
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: veracode-artifact
+          path: "source-code-repo/veracode-artifacts/*"
+          if-no-files-found: error

@@ -14,9 +14,17 @@ on:
         type: string
 
 jobs:
-  build:
+  build-package:
     if: ${{ inputs.event_name == 'veracode-policy-scan-package' }}
     uses: ./.github/workflows/veracode-default-build.yml
+    with:
+      repository_full_name: ${{ inputs.repository_full_name }}
+      image: ${{ inputs.image }}
+    secrets: inherit
+
+  build-dotnet:
+    if: ${{ inputs.event_name == 'veracode-policy-scan-dotnet-package' }}
+    uses: ./.github/workflows/veracode-dotnet-build.yml
     with:
       repository_full_name: ${{ inputs.repository_full_name }}
       image: ${{ inputs.image }}
