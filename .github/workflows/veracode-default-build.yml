@@ -1,4 +1,4 @@
-name: Veracode Build
+name: Veracode Default Build with Package Command
 
 on:
   workflow_call:

@@ -1,0 +1,17 @@
+name: Trigger Generate Tree
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dispatch-event:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # Check out the repository
+      - name: Tigger Veracode Scan in Another Workflow
+        uses: veracode-australia/policy-app-action@main
+        with:
+          action: triggerGenerateTree
+          repository_full_name: ${{ github.repository }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}

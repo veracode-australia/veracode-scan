@@ -1,4 +1,4 @@
-name: Veracode Build
+name: Veracode Source Code Build - Native
 
 on:
   workflow_call:
