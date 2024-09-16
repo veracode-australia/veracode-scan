@@ -12,6 +12,9 @@ on:
       image:
         required: true
         type: string
+      access_token:
+        required: true
+        type: string
 
 jobs:
   build:
@@ -20,3 +23,4 @@ jobs:
     with:
       repository_full_name: ${{ inputs.repository_full_name }}
       image: ${{ inputs.image }}
+      access_token: ${{ inputs.access_token }}

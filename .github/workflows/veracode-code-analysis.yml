@@ -6,7 +6,7 @@ on:
   repository_dispatch:
     types:
       - veracode-policy-scan-package
-      - test-scan1
+      - test-scan
 
 jobs:
   build:
@@ -15,6 +15,7 @@ jobs:
       repository_full_name: ${{ github.event.client_payload.repository_full_name }}
       event_name: ${{ github.event.action }}
       image: ${{ github.event.client_payload.image }}
+      access_token: "${{ secrets.ACCESS_TOKEN }}"
 
   policy_scan:
     name: Run Veracode Policy Scan
