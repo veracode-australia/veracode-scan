@@ -1,0 +1,33 @@
+name: Veracode Build
+
+on:
+  workflow_call:
+    inputs:
+      repository_full_name:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ${{ inputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository_full_name }}
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: "source-code-repo"
+
+      - name: Package the application
+        id: application_package
+        shell: bash
+        run: |
+          zip -r veracode.zip source-code-repo -x .git/**\* bin/**\* e2e/**\* tests/**\* node_modules/**\* *.pyd *.mwb *.exe *.dll *.bin *.png *.xml *.bat *.g2p *.gp4 *.wav *.jpg *.svg *.sfx *.prx *.sb *.nrm *.config *.ini *.pdf *.dat *.docx *.whl *.so *_arm64 *_armhf *_x64 *.xlsm *.sql
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: veracode-artifact
+          path: veracode.zip
+          if-no-files-found: error

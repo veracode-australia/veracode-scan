@@ -29,3 +29,11 @@ jobs:
       repository_full_name: ${{ inputs.repository_full_name }}
       image: ${{ inputs.image }}
     secrets: inherit
+
+  build-source-code:
+    if: ${{ inputs.event_name == 'veracode-policy-scan-source-code' }}
+    uses: ./.github/workflows/veracode-source-code-build.yml
+    with:
+      repository_full_name: ${{ inputs.repository_full_name }}
+      image: ${{ inputs.image }}
+    secrets: inherit
