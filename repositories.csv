@@ -1,6 +1,6 @@
 repository_name, batch_number, language
-vsdeng-veracode-qan/qan-python, 2, other-data 
-vsdeng-veracode-qan/verademo-java-maven-no-config, 2, more-data
-vsdeng-veracode-qan/vulnerable-java-application, 2, more-data
-vsdeng-veracode-qan/verademo-php, 2, more-data
-vsdeng-veracode-qan/verademo-dotnet, 1, more-data
+veracode-australia/qan-python, 2, other-data 
+veracode-australia/verademo-java-maven-no-config, 1, more-data
+veracode-australia/vulnerable-java-application, 2, more-data
+veracode-australia/verademo-php, 2, more-data
+veracode-australia/verademo-dotnet, 2, more-data
