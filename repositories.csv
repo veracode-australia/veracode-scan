@@ -1,6 +1,6 @@
-repository_name, batch_number, language
-veracode-australia/qan-python, 2, other-data 
-veracode-australia/verademo-java-maven-no-config, 1, more-data
-veracode-australia/vulnerable-java-application, 2, more-data
-veracode-australia/verademo-php, 2, more-data
-veracode-australia/verademo-dotnet, 2, more-data
+repository_name, batch_number, scan_event, image
+veracode-australia/qan-python, 2, veracode-policy-scan-package, ubuntu-latest 
+veracode-australia/verademo-java-maven-no-config, 1, veracode-policy-scan-package, ubuntu-latest 
+veracode-australia/vulnerable-java-application, 2, veracode-policy-scan-package, ubuntu-latest 
+veracode-australia/verademo-php, 2, veracode-policy-scan-package, ubuntu-latest 
+veracode-australia/verademo-dotnet, 1, test-scan, windows-latest
