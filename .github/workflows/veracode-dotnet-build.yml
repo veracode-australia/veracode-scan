@@ -84,8 +84,11 @@ jobs:
         run: |
           echo "::error::Veracode static scan faced a problem. Please contact your Veracode administrator for more information."
 
+      - name: List artifact directory contents (for debugging)
+        run: Get-ChildItem -Path source-code-repo/veracode_artifacts -Recurse
+
       - uses: actions/upload-artifact@v4
         with:
           name: veracode-artifact
-          path: "source-code-repo/veracode-artifacts/*"
+          path: source-code-repo/veracode_artifacts/*
           if-no-files-found: error
