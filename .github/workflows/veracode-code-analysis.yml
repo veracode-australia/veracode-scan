@@ -15,7 +15,7 @@ jobs:
       repository_full_name: ${{ github.event.client_payload.repository_full_name }}
       event_name: ${{ github.event.action }}
       image: ${{ github.event.client_payload.image }}
-      access_token: "${{ secrets.ACCESS_TOKEN }}"
+    secrets: inherit
 
   policy_scan:
     name: Run Veracode Policy Scan
