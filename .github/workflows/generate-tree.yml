@@ -24,6 +24,7 @@ jobs:
         run: |
           echo "Repository: ${{ github.event.client_payload.repository_full_name }}"
           tree
+          tree > tree-structure.txt
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
