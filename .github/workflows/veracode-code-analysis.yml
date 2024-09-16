@@ -1,0 +1,44 @@
+name: Veracode Static Code Analysis
+
+run-name: Static Code Analysis - ${{ github.event.client_payload.repository_full_name }}
+
+on:
+  repository_dispatch:
+    types:
+      - veracode-policy-scan-package
+      - test-scan
+
+jobs:
+  build:
+    uses: ./.github/workflows/veracode-build-artifact-for-scanning.yml
+    with:
+      repository_full_name: ${{ github.event.client_payload.repository_full_name }}
+      event_name: ${{ github.event.action }}
+      image: ${{ github.event.client_payload.image }}
+
+  policy_scan:
+    name: Run Veracode Policy Scan
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: get archive
+        uses: actions/download-artifact@v4
+        with:
+          name: veracode-artifact
+          path: ./veracode_artifact_directory
+
+      - uses: veracode/uploadandscan-action@main
+        id: upload_and_scan
+        with:
+          appname: ${{ github.event.client_payload.repository_full_name }}
+          createprofile: true
+          policy: ${{ github.event.client_payload.policy }}
+          version: "${{ github.run_id }}"
+          filepath: ./veracode_artifact_directory/
+          deleteincompletescan: true
+          vid: "${{ secrets.VERACODE_API_ID }}"
+          vkey: "${{ secrets.VERACODE_API_KEY }}"
+          failbuild: false

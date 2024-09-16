@@ -5,7 +5,7 @@ run-name: Static Code Analysis - ${{ github.event.client_payload.repository_full
 on:
   repository_dispatch:
     types:
-      - test-scan
+      - test-scan1
 
 env:
   # Path to the solution file relative to the root of the project.
