@@ -5,7 +5,7 @@ run-name: Static Code Analysis - ${{ github.event.client_payload.repository_full
 on:
   repository_dispatch:
     types:
-      - veracode-policy-scan-package
+      - veracode-policy-scan-package1
 
 jobs:
   veracode-policy-scan:
