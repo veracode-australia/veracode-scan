@@ -53,7 +53,7 @@ jobs:
           chmod +x install.sh
           ./install.sh system
           cd $working_path/source-code-repo
-          veracode package --source . --output veracode-artifacts --trust
+          veracode package --source . --output $working_path/veracode-artifacts --trust
 
       - name: Package error
         if: failure() && steps.application_package.outcome == 'failure'
