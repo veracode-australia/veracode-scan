@@ -1,0 +1,43 @@
+name: Veracode DotNet Build with Native Command
+
+on:
+  workflow_call:
+    inputs:
+      repository_full_name:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ inputs.image }}
+    env:
+      VERACODE_API_KEY_ID: "${{ secrets.VERACODE_API_ID }}"
+      VERACODE_API_KEY_SECRET: "${{ secrets.VERACODE_API_KEY }}"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository_full_name }}
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: "source-code-repo"
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build
+        run: |
+          cd source-code-repo
+          dotnet restore
+          dotnet publish -p:UseAppHost=False -p:MapFileExtensions=False -c Debug -o ./veracode_artifacts
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: veracode-artifact
+          path: source-code-repo/veracode_artifacts/*
+          if-no-files-found: error
