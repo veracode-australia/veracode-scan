@@ -22,9 +22,17 @@ jobs:
       image: ${{ inputs.image }}
     secrets: inherit
 
-  build-dotnet:
+  build-dotnet-package:
     if: ${{ inputs.event_name == 'veracode-policy-scan-dotnet-package' }}
     uses: ./.github/workflows/veracode-dotnet-build.yml
+    with:
+      repository_full_name: ${{ inputs.repository_full_name }}
+      image: ${{ inputs.image }}
+    secrets: inherit
+
+  build-dotnet:
+    if: ${{ inputs.event_name == 'veracode-policy-scan-dotnet' }}
+    uses: ./.github/workflows/veracode-dotnet-build-native.yml
     with:
       repository_full_name: ${{ inputs.repository_full_name }}
       image: ${{ inputs.image }}
