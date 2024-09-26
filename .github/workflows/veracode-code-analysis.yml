@@ -7,6 +7,7 @@ on:
     types:
       - veracode-policy-scan-package
       - veracode-policy-scan-dotnet-package
+      - veracode-policy-scan-dotnet
       - veracode-policy-scan-source-code
 
 jobs:
