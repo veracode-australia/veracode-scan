@@ -13,8 +13,8 @@ on:
 jobs:
   build:
     runs-on: ${{ inputs.image }}
-    # container:
-    #   image: ${{ inputs.build_packager_image }}
+    container:
+      image: veracode/scm-packaging
     env:
       VERACODE_API_KEY_ID: "${{ secrets.VERACODE_API_ID }}"
       VERACODE_API_KEY_SECRET: "${{ secrets.VERACODE_API_KEY }}"
